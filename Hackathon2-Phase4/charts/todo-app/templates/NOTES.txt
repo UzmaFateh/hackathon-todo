@@ -1,0 +1,36 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}
+
+Frontend Application:
+- Service: {{ include "todo-app.fullname" . }}-frontend
+- Port: {{ .Values.frontend.service.port }}
+{{- if .Values.frontend.ingress.enabled }}
+- Ingress: {{ range .Values.frontend.ingress.hosts }}{{ .host }}{{ end }}
+{{- else }}
+- Access the frontend by port-forwarding:
+  kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "todo-app.fullname" . }}-frontend {{ .Values.frontend.service.port }}:{{ .Values.frontend.service.port }}
+{{- end }}
+
+Backend API:
+- Service: {{ include "todo-app.fullname" . }}-backend
+- Port: {{ .Values.backend.service.port }}
+- Health check: http://{{ include "todo-app.fullname" . }}-backend:{{ .Values.backend.service.port }}/api/health
+
+Database:
+- Service: {{ include "todo-app.fullname" . }}-database
+- Port: {{ .Values.database.service.port }}
+- Database: {{ .Values.database.postgresql.auth.database }}
+- Username: {{ .Values.database.postgresql.auth.username }}
+
+{{- if eq .Values.global.imageRegistry "" }}
+###############################################################################
+WARNING: You are using default image tags. Make sure to update the values
+to use your specific container image repositories and tags.
+###############################################################################
+{{- end }}

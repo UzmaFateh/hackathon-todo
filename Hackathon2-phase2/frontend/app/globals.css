@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+/* Design System - Tailwind CSS v4 Theme Configuration */
+@theme inline {
+  /* Sea Theme Color Palette */
+  --color-primary-50: #e0f7fa;
+  --color-primary-100: #b2ebf2;
+  --color-primary-200: #80deea;
+  --color-primary-300: #4dd0e1;
+  --color-primary-400: #26c6da;
+  --color-primary-500: #00bcd4; /* Cyan 500 */
+  --color-primary-600: #00acc1;
+  --color-primary-700: #0097a7;
+  --color-primary-800: #00838f;
+  --color-primary-900: #006064;
+
+  --color-secondary-50: #e0f2f1;
+  --color-secondary-100: #b2dfdb;
+  --color-secondary-200: #80cbc4;
+  --color-secondary-300: #4db6ac;
+  --color-secondary-400: #26a69a;
+  --color-secondary-500: #009688; /* Teal 500 */
+  --color-secondary-600: #00897b;
+  --color-secondary-700: #00796b;
+  --color-secondary-800: #00695c;
+  --color-secondary-900: #004d40;
+
+  --color-accent-50: #f1f8e9;
+  --color-accent-100: #dcedc8;
+  --color-accent-500: #8bc34a; /* Light Green 500 */
+
+  --color-success-50: #f0fdf4;
+  --color-success-500: #10b981;
+  
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+
+  /* Deep Sea Backgrounds */
+  --color-sea-900: #0f172a; /* Slate 900 base */
+  --color-sea-800: #1e293b;
+  --color-sea-50: #f8fafc;
+
+  /* Spacing Scale */
+  --spacing-4.5: 1.125rem;
+  --spacing-13: 3.25rem;
+  --spacing-15: 3.75rem;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Box Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 188, 212, 0.1), 0 2px 4px -1px rgba(0, 188, 212, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 188, 212, 0.1), 0 4px 6px -2px rgba(0, 188, 212, 0.05);
+  --shadow-glow: 0 0 15px rgba(0, 188, 212, 0.3);
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  
+  /* Transitions */
+  --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root {
+  --background: #f0f9ff; /* Very light cyan tint */
+  --foreground: #0f172a;
+  
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+body {
+  background: linear-gradient(135deg, #e0f7fa 0%, #e0f2f1 100%);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+/* Luxury Utilities */
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-xl);
+}
+
+.text-gradient {
+  background: linear-gradient(to right, var(--color-primary-600), var(--color-secondary-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-luxury {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500));
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-luxury:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 188, 212, 0.4);
+  background: linear-gradient(135deg, var(--color-primary-400), var(--color-secondary-400));
+}
+
+.btn-luxury:active {
+  transform: translateY(0);
+}
+
+.input-luxury {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 188, 212, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem 1.25rem;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.input-luxury:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+  background: white;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-200);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-300);
+}

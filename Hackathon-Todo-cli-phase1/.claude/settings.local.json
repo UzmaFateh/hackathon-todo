@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p specs/1-todo-console-app/checklists)",
+      "Bash(.specify/scripts/powershell/check-prerequisites.ps1 -Json)",
+      "Bash(.specify/scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks)",
+      "Bash(git rev-parse --git-dir)",
+      "Bash(uv venv)",
+      "Bash(source .venv/Scripts/activate)",
+      "Bash(uv pip install -e .)",
+      "Bash(python -m todo.main --help)",
+      "Bash(python -m todo.main add --title \"Test Task\" --description \"This is a test task\" --priority high --tags test work)",
+      "Bash(python -m todo.main add --help)",
+      "Bash(python -m todo.main add --title \"Test Task\" --description \"This is a test task\" --priority high --tags test --tags work)",
+      "Bash(python -m todo.main list)",
+      "Bash(python test_implementation.py)",
+      "Bash(git fetch --all --prune)",
+      "Bash(.specify/scripts/powershell/setup-plan.ps1 -Json)",
+      "Bash(uv pip install rich textual)"
+    ]
+  }
+}

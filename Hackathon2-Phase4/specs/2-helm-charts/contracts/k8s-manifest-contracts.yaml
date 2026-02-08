@@ -1,0 +1,196 @@
+# Kubernetes Manifest Contract Definitions for Helm Charts
+
+# Contract for Frontend Deployment
+frontend-deployment:
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: "{{ include \"chart.fullname\" . }}-frontend"
+    labels:
+      app.kubernetes.io/name: {{ include "chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  spec:
+    replicas: {{ .Values.frontend.replicaCount }}
+    selector:
+      matchLabels:
+        app.kubernetes.io/name: {{ include "chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: frontend
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/name: {{ include "chart.name" . }}
+          app.kubernetes.io/instance: {{ .Release.Name }}
+          app: frontend
+      spec:
+        containers:
+          - name: frontend
+            image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+            ports:
+              - containerPort: 3000
+            env:
+              - name: NEXT_PUBLIC_API_URL
+                value: "http://{{ include "chart.fullname" . }}-backend:80"
+            resources:
+              {{- toYaml .Values.frontend.resources | nindent 14 }}
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 3000
+            readinessProbe:
+              httpGet:
+                path: /
+                port: 3000
+
+# Contract for Backend Deployment
+backend-deployment:
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: "{{ include "chart.fullname" . }}-backend"
+    labels:
+      app.kubernetes.io/name: {{ include "chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  spec:
+    replicas: {{ .Values.backend.replicaCount }}
+    selector:
+      matchLabels:
+        app.kubernetes.io/name: {{ include "chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: backend
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/name: {{ include "chart.name" . }}
+          app.kubernetes.io/instance: {{ .Release.Name }}
+          app: backend
+      spec:
+        containers:
+          - name: backend
+            image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+            ports:
+              - containerPort: 8000
+            env:
+              - name: DATABASE_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "chart.fullname" . }}-db-secret
+                    key: db-url
+            resources:
+              {{- toYaml .Values.backend.resources | nindent 14 }}
+            livenessProbe:
+              httpGet:
+                path: /api/health
+                port: 8000
+            readinessProbe:
+              httpGet:
+                path: /api/health
+                port: 8000
+
+# Contract for Database Deployment
+database-deployment:
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: "{{ include "chart.fullname" . }}-database"
+    labels:
+      app.kubernetes.io/name: {{ include "chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/name: {{ include "chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: database
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/name: {{ include "chart.name" . }}
+          app.kubernetes.io/instance: {{ .Release.Name }}
+          app: database
+      spec:
+        containers:
+          - name: postgres
+            image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.tag }}"
+            ports:
+              - containerPort: 5432
+            env:
+              - name: POSTGRES_DB
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "chart.fullname" . }}-db-secret
+                    key: db-name
+              - name: POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "chart.fullname" . }}-db-secret
+                    key: db-user
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ include "chart.fullname" . }}-db-secret
+                    key: db-password
+            resources:
+              {{- toYaml .Values.database.resources | nindent 14 }}
+            volumeMounts:
+              - name: postgres-storage
+                mountPath: /var/lib/postgresql/data
+            livenessProbe:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+              initialDelaySeconds: 30
+              periodSeconds: 10
+            readinessProbe:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+              initialDelaySeconds: 5
+              periodSeconds: 5
+        volumes:
+          - name: postgres-storage
+            persistentVolumeClaim:
+              claimName: "{{ include "chart.fullname" . }}-database-pvc"
+
+# Contract for Frontend Service
+frontend-service:
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: "{{ include "chart.fullname" . }}-frontend"
+    labels:
+      app.kubernetes.io/name: {{ include "chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  spec:
+    type: {{ .Values.frontend.service.type }}
+    ports:
+      - port: {{ .Values.frontend.service.port }}
+        targetPort: 3000
+        protocol: TCP
+        name: http
+    selector:
+      app: frontend
+
+# Contract for Backend Service
+backend-service:
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: "{{ include "chart.fullname" . }}-backend"
+    labels:
+      app.kubernetes.io/name: {{ include "chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  spec:
+    type: {{ .Values.backend.service.type }}
+    ports:
+      - port: {{ .Values.backend.service.port }}
+        targetPort: 8000
+        protocol: TCP
+        name: http
+    selector:
+      app: backend

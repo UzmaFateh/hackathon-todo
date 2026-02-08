@@ -1,0 +1,11 @@
+apiVersion: v2
+name: todo-app
+description: A Helm chart for deploying the Todo application on Kubernetes
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+maintainers:
+  - name: Developer
+    email: developer@example.com
+annotations:
+  category: Productivity
