@@ -112,7 +112,7 @@ export default function LoginPage() {
           <h2 className="text-3xl font-bold text-gradient mb-2">
             {isLogin ? 'Welcome Back' : 'Join the Voyage'}
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-400">
             {isLogin ? 'Sign in to access your tasks' : 'Start your productivity journey'}
           </p>
         </div>
@@ -125,7 +125,7 @@ export default function LoginPage() {
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="email-address" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
+            <label htmlFor="email-address" className="block text-sm font-medium text-gray-300 mb-2 ml-1">
               Email address
             </label>
             <input
@@ -142,7 +142,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2 ml-1">
               Password
             </label>
             <input
@@ -160,7 +160,7 @@ export default function LoginPage() {
 
           {!isLogin && (
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2 ml-1">
                 Full name
               </label>
               <input
@@ -178,7 +178,7 @@ export default function LoginPage() {
 
           {!isLogin && (
             <div>
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-2 ml-1">
+              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-300 mb-2 ml-1">
                 Confirm Password
               </label>
               <input
@@ -223,7 +223,7 @@ export default function LoginPage() {
           </button>
 
           <div className="block">
-            <Link href="/" className="text-sm text-gray-500 hover:text-gray-700 transition-colors inline-flex items-center">
+            <Link href="/" className="text-sm text-gray-500 hover:text-gray-300 transition-colors inline-flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>

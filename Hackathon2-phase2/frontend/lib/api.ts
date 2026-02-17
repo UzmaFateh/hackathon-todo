@@ -94,3 +94,8 @@ export async function deleteTask(id: number): Promise<void> {
 }
 
 export type { Task };
+export async function getAnalytics(): Promise<{ insight: string }> {
+  return apiRequest('/api/analytics', {
+    method: 'POST',
+  });
+}
